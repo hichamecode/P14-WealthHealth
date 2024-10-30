@@ -10,8 +10,8 @@ export default function Footer() {
         flexDirection: 'column',
         alignItems: 'center',
         padding: 2,
-        backgroundColor: 'secondary.main',
-        color: 'white'
+        backgroundColor: 'primary.main',
+        color: "text.secondary",
       }}
     >
       <Typography variant="body1" align="center">

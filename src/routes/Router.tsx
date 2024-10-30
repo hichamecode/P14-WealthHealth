@@ -1,18 +1,25 @@
 import { Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ThemeProvider } from "@mui/material";
+import { lightTheme, darkTheme } from "../utils/theme"; 
+import { RootState } from "../store/store"; 
 
-import Home from "../pages/Home";
+import CreateEmployee from "../pages/CreateEmployee";
+import NewHome from "../pages/NewHome";
 import Error from "../pages/Error";
 import EmployeeList from "../pages/EmployeeList";
 
-
-export default function Router () {
+export default function Router() {
+  const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path='/employee-list' element={<EmployeeList />} />
-      <Route path="*" element={<Error />} />
-    </Routes>
-  )
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <Routes>
+        <Route path="/" element={<NewHome />} />
+        <Route path="/create-employee" element={<CreateEmployee />} />
+        <Route path="/employee-list" element={<EmployeeList />} />
+        <Route path="*" element={<Error />} />
+      </Routes>
+    </ThemeProvider>
+  );
 }
-
