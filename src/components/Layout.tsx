@@ -1,6 +1,6 @@
 import Header from "./Header";
 import Footer from "./Footer";
-
+import './Layout.scss'
 
 
 interface layoutProps {
@@ -9,11 +9,11 @@ interface layoutProps {
 
 function Layout ({ children }: layoutProps) {
   return (
-    <>
+    <main className="layout">
       <Header />
       {children}
       <Footer />
-    </>
+    </main>
   )
 }
 

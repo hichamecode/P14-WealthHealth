@@ -1,14 +1,15 @@
 import Layout from "../components/Layout";
-import { Button } from "@mui/material";
+import { Button, Typography, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Link } from "react-router-dom";
-import { Typography, Box } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import  dataType  from "../types/DataType";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useSelector } from "react-redux";
 
 export default function EmployeeList() {
+  const employees = useSelector((state) => state.employees.employees);
+  console.log("employees", employees);
 
-  const columns = [
+  const columns: GridColDef[] = [
     { field: "firstName", headerName: "First Name", flex: 1 },
     { field: "lastName", headerName: "Last Name", flex: 1 },
     { field: "dateOfBirth", headerName: "Date of Birth", flex: 1 },
@@ -20,43 +21,11 @@ export default function EmployeeList() {
     { field: "department", headerName: "Department", flex: 1 },
   ];
 
+  const rows = employees.map((employee: any, index: number) => ({
+    ...employee,
+    id: index,
+  }));
 
-    const newEmployeeData = localStorage.getItem("newEmployeeData");
-    
-    if (!newEmployeeData) {
-      return null; 
-    }
-  
-    const newEmployeeDataParsed: dataType = JSON.parse(newEmployeeData);
-  
-    const {
-      firstName,
-      lastName,
-      startDate,
-      department,
-      dateOfBirth,
-      street,
-      city,
-      state,
-      zipCode,
-    } = newEmployeeDataParsed;
-  
-
-  const rows = [
-    {
-      id: 1,
-      firstName: {firstName},
-      lastName: {lastName},
-      dateOfBirth: {dateOfBirth},
-      startDate: {startDate},
-      street: {street},
-      city: {city},
-      zipCode: {zipCode},
-      state: {state},
-      department: {department},
-    }
-    ];
-  
   return (
     <Layout>
       <Box
@@ -73,7 +42,12 @@ export default function EmployeeList() {
           component="h2"
           variant="h3"
           align="center"
-          sx={{ paddingBottom: 7, paddingTop: 7, fontFamily: "Genos", color: "text.primary" }}
+          sx={{
+            paddingBottom: 7,
+            paddingTop: 7,
+            fontFamily: "Genos",
+            color: "text.primary",
+          }}
         >
           CURRENT EMPLOYEES
         </Typography>
@@ -98,10 +72,12 @@ export default function EmployeeList() {
 
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
+          getRowId={(row) => row.id}
           rows={rows}
           columns={columns}
           checkboxSelection
           disableRowSelectionOnClick
+          sx={{backgroundColor: "background.default" }}
         />
       </Box>
     </Layout>

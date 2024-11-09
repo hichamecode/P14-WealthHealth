@@ -16,13 +16,17 @@ export const schema = z.object({
     .regex(/^[A-Za-z\s-]+$/, {
       message: "It can only contain letters, spaces, or hyphens",
     }),
-  dateOfBirth: z
-    .instanceof(Object)
-    .transform((value) => dayjs(value).format("YYYY-MM-DD")),
-  startDate: z
-    .instanceof(Object)
-    .transform((value) => dayjs(value).format("YYYY-MM-DD")),
-  street: z.string().min(5, { message: "A valid address is required" }),
+    dateOfBirth: z.preprocess((arg) => {
+      if (dayjs.isDayjs(arg)) return arg.toDate(); 
+      return arg;
+    }, z.date()).transform((date) => dayjs(date).format("YYYY-MM-DD")),
+    
+    startDate: z.preprocess((arg) => {
+      if (dayjs.isDayjs(arg)) return arg.toDate(); 
+      return arg;
+    }, z.date()).transform((date) => dayjs(date).format("YYYY-M-DD")),
+
+    street: z.string().min(5, { message: "A valid address is required" }),
   city: z.string().min(2, { message: "A valid city is required" }),
   state: z.string().min(1, { message: "State is required" }),
   zipCode: z.string().regex(/^\d{5}$/, { message: "Invalid zip code" }),
@@ -30,3 +34,4 @@ export const schema = z.object({
 });
 
 export type FormFields = z.infer<typeof schema>;
+

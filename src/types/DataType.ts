@@ -1,10 +1,9 @@
-
 type dataType = {
   firstName: string;
   lastName: string;
-  startDate: string;
+  startDate: Date;
   department: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   street: string;
   city: string;
   state: string;

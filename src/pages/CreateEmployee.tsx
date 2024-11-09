@@ -1,68 +1,93 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
-  Grid2,
-  Typography,
-  TextField,
-  FormGroup,
-  Stack,
-  Select,
-  MenuItem,
   Box,
   Button,
   FormControl,
+  FormGroup,
   FormHelperText,
+  Grid2,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+  Autocomplete,
 } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Link, useNavigate } from "react-router-dom";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { SubmitHandler, useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { states, departments } from "../data/data";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
-import { schema, FormFields } from "../utils/validationSchema";
-import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { departments } from "../data/data";
+import { RootState, AppDispatch } from "../store/store";
+import { FormFields, schema } from "../utils/validationSchema";
+import { createEmployeeThunk } from "../store/employeesSlice";
+import { fetchAddressSuggestions } from "../store/addressSlice";
+import { useState } from "react";
+import { showToastSuccess, showToastError } from "../utils/toastNotifications";
 
 export default function CreateEmployee() {
+  const [addressInput, setAddressInput] = useState("");
+  const dispatch: AppDispatch = useDispatch();
 
+  const suggestions = useSelector(
+    (state: RootState) => state.address.suggestions || []
+  );
+
+  const handleAddressInput = (event: React.SyntheticEvent, value: string) => {
+    setAddressInput(value);
+    if (value.length > 2) {
+      dispatch(fetchAddressSuggestions(value));
+    }
+  };
+
+  // créer un champ chooseAddress pour distribuer les datas de l'adresse
+  const handleAddressSelect = (
+    event: React.SyntheticEvent,
+    selectedOption: { description: string }
+  ) => {
+    if (selectedOption) {
+      const [street, city, state] = selectedOption.description
+        .split(",")
+        .map((item) => item.trim());
+      console.log(street);
+      setValue("street", street);
+      setValue("city", city);
+      setValue("state", state);
+    }
+  };
+
+  // Validation du formulaire
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
   });
 
-  const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
   const navigate = useNavigate();
+  const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
 
   const onSubmit: SubmitHandler<FormFields> = (data): void => {
-    console.log(data);
-    localStorage.setItem("newEmployeeData", JSON.stringify(data));
-    toast.success("Employee created successfully!", {
-      position: "top-center",
-      autoClose: 3000,
-      closeOnClick: true,
-      pauseOnHover: true,
-      hideProgressBar: false,
-      theme: isDarkMode ? "dark" : "light",
-      
-    });
-    navigate("/employee-list");
+    dispatch(createEmployeeThunk(data));
+
+    try {
+      showToastSuccess("Employee created successfully", isDarkMode);
+      navigate("/employee-list");
+    } catch (error) {
+      console.log("error ", error);
+      showToastError("Failed to create employee", isDarkMode);
+    }
   };
 
   const onInvalid = (): void => {
-    toast.error("Please fill out all the required fields ", {
-      position: "top-center",
-      autoClose: 3000,
-      closeOnClick: true,
-      pauseOnHover: true,
-      hideProgressBar: false,
-      theme: isDarkMode ? "dark" : "light",
-    });
+    showToastError("Please fill in all required fields", isDarkMode);
   };
 
   const styleForInputLabels = {
@@ -84,10 +109,15 @@ export default function CreateEmployee() {
         }}
       >
         <Typography
-           component="h2"
-           variant="h3"
-           align="center"
-           sx={{ paddingBottom: 7, paddingTop: 7, fontFamily: "Genos", color: "text.primary" }}
+          component="h2"
+          variant="h3"
+          align="center"
+          sx={{
+            paddingBottom: 7,
+            paddingTop: 7,
+            fontFamily: "Genos",
+            color: "text.primary",
+          }}
         >
           CREATE EMPLOYEE
         </Typography>
@@ -117,6 +147,7 @@ export default function CreateEmployee() {
           backgroundColor: "background.default",
           color: "text.primary",
         }}
+        data-testid="employee-form"
       >
         <Grid2
           container
@@ -130,6 +161,7 @@ export default function CreateEmployee() {
               sx={styleForInputLabels}
               label="First Name"
               type="text"
+              data-testid="first-name"
               variant="outlined"
               fullWidth
               {...register("firstName")}
@@ -140,6 +172,7 @@ export default function CreateEmployee() {
               sx={styleForInputLabels}
               label="Last Name"
               type="text"
+              data-testid="last-name"
               variant="outlined"
               fullWidth
               {...register("lastName")}
@@ -151,6 +184,7 @@ export default function CreateEmployee() {
             <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
               <Controller
                 name="dateOfBirth"
+                data-testid="birthdate"
                 control={control}
                 render={({ field }) => (
                   <DatePicker
@@ -170,6 +204,7 @@ export default function CreateEmployee() {
               />
               <Controller
                 name="startDate"
+                data-testid="startdate"
                 control={control}
                 render={({ field }) => (
                   <DatePicker
@@ -192,20 +227,35 @@ export default function CreateEmployee() {
           <FormGroup>
             Address
             <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-              <TextField
-                sx={styleForInputLabels}
-                label="Street"
-                type="text"
+              <Autocomplete
                 fullWidth
-                variant="filled"
-                {...register("street")}
-                error={!!errors.street}
-                helperText={errors.street?.message}
+                options={suggestions}
+                getOptionLabel={(option: { description: string }) =>
+                  option.description
+                }
+                onInputChange={handleAddressInput}
+                onChange={handleAddressSelect}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    {...register("street")}
+                    label="Street"
+                    data-testid="street"
+                    variant="filled"
+                    fullWidth
+                    error={!!errors.street}
+                    helperText={errors.street?.message}
+                    sx={styleForInputLabels}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                )}
               />
               <TextField
                 sx={styleForInputLabels}
                 label="City"
+                data-testid="city"
                 type="text"
+                InputLabelProps={{ shrink: true }}
                 fullWidth
                 variant="filled"
                 {...register("city")}
@@ -215,24 +265,23 @@ export default function CreateEmployee() {
             </Stack>
             <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
               <FormControl fullWidth error={!!errors.state}>
-                <Controller
-                  name="state"
-                  control={control}
-                  render={({ field }) => (
-                    <Select {...field} label="State" fullWidth variant="filled">
-                      {states.map((state) => (
-                        <MenuItem key={state} value={state}>
-                          {state}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
+                <TextField
+                  sx={styleForInputLabels}
+                  label="State"
+                  data-testid="state"
+                  type="text"
+                  InputLabelProps={{ shrink: true }}
+                  fullWidth
+                  variant="filled"
+                  {...register("state")}
+                  helperText={errors.state?.message}
                 />
-                <FormHelperText>{errors.state?.message}</FormHelperText>
+                {/* <FormHelperText>{errors.state?.message}</FormHelperText> */}
               </FormControl>
               <TextField
                 sx={styleForInputLabels}
                 label="Zip Code"
+                data-testid="zip-code"
                 type="text"
                 fullWidth
                 variant="filled"
@@ -244,7 +293,10 @@ export default function CreateEmployee() {
           </FormGroup>
           <FormGroup>
             Department
-            <FormControl fullWidth error={!!errors.department}>
+            <FormControl
+              fullWidth
+              data-testid="department"
+              error={!!errors.department}>
               <Controller
                 name="department"
                 control={control}
@@ -254,7 +306,6 @@ export default function CreateEmployee() {
                     label="Department"
                     fullWidth
                     variant="outlined"
-                    sx={{ marginBottom: 4 }}
                   >
                     {departments.map((department) => (
                       <MenuItem key={department} value={department}>
@@ -279,5 +330,5 @@ export default function CreateEmployee() {
         </Grid2>
       </Box>
     </Layout>
-  )
+  );
 }
