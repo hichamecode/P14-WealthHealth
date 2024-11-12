@@ -35,6 +35,7 @@ export default function EmployeeList() {
           justifyContent: "center",
           textAlign: "center",
           gap: 4,
+          flex: 1,
           backgroundColor: "background.default",
         }}
       >
@@ -43,8 +44,8 @@ export default function EmployeeList() {
           variant="h3"
           align="center"
           sx={{
-            paddingBottom: 7,
-            paddingTop: 7,
+            paddingBottom: 2,
+            paddingTop: 2,
             fontFamily: "Genos",
             color: "text.primary",
           }}

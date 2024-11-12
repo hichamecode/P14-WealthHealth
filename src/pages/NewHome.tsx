@@ -15,6 +15,8 @@ export default function NewHome() {
           justifyContent: "center",
           textAlign: "center",
           paddingX: 2,
+          paddingY: 10,
+          flex: 1,
           backgroundColor: "background.default",
         }}
       >

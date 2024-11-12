@@ -104,6 +104,7 @@ export default function CreateEmployee() {
           justifyContent: "center",
           textAlign: "center",
           gap: 4,
+          flex: 1,
           backgroundColor: "background.default",
         }}
       >
@@ -112,8 +113,8 @@ export default function CreateEmployee() {
           variant="h3"
           align="center"
           sx={{
-            paddingBottom: 7,
-            paddingTop: 7,
+            paddingTop: 5,
+            paddingBottom: 5,
             fontFamily: "Genos",
             color: "text.primary",
           }}
@@ -151,12 +152,12 @@ export default function CreateEmployee() {
       >
         <Grid2
           container
-          spacing={2}
-          gap={3}
+          spacing={4}
+          gap={4}
           direction="column"
           alignContent="center"
         >
-          <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+          <Stack spacing={4} direction="row" sx={{ marginBottom: 4 }}>
             <TextField
               sx={styleForInputLabels}
               label="First Name"
@@ -181,7 +182,7 @@ export default function CreateEmployee() {
             />
           </Stack>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+            <Stack spacing={4} direction="row" sx={{ marginBottom: 4 }}>
               <Controller
                 name="dateOfBirth"
                 data-testid="birthdate"
@@ -226,7 +227,7 @@ export default function CreateEmployee() {
           </LocalizationProvider>
           <FormGroup>
             Address
-            <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+            <Stack spacing={4} direction="row" sx={{ marginBottom: 4 }}>
               <Autocomplete
                 fullWidth
                 options={suggestions}
@@ -263,7 +264,7 @@ export default function CreateEmployee() {
                 helperText={errors.city?.message}
               />
             </Stack>
-            <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+            <Stack spacing={4} direction="row" sx={{ marginBottom: 4 }}>
               <FormControl fullWidth error={!!errors.state}>
                 <TextField
                   sx={styleForInputLabels}
