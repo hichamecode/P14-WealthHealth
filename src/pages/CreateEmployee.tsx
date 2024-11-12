@@ -30,7 +30,7 @@ import { useState } from "react";
 import { showToastSuccess, showToastError } from "../utils/toastNotifications";
 
 export default function CreateEmployee() {
-  const [addressInput, setAddressInput] = useState("");
+  const [, setAddressInput] = useState("");
   const dispatch: AppDispatch = useDispatch();
 
   const suggestions = useSelector(
@@ -60,7 +60,6 @@ export default function CreateEmployee() {
     }
   };
 
-  // Validation du formulaire
   const {
     register,
     handleSubmit,
@@ -127,6 +126,7 @@ export default function CreateEmployee() {
           startIcon={<VisibilityIcon />}
           component={Link}
           to="/employee-list"
+          data-testid="employee-list-button"
           sx={{
             height: 50,
             borderRadius: 5,

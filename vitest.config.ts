@@ -7,3 +7,4 @@ export default defineConfig({
     setupFiles: './src/tests/setup.ts', // fichier de configuration pour jest-dom
   },
 });
+

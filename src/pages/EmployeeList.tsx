@@ -7,10 +7,9 @@ import { useSelector } from "react-redux";
 
 export default function EmployeeList() {
   const employees = useSelector((state) => state.employees.employees);
-  console.log("employees", employees);
 
   const columns: GridColDef[] = [
-    { field: "firstName", headerName: "First Name", flex: 1 },
+    { field: "firstName", headerName: "First Name", flex: 1, },
     { field: "lastName", headerName: "Last Name", flex: 1 },
     { field: "dateOfBirth", headerName: "Date of Birth", flex: 1 },
     { field: "startDate", headerName: "Start Date", flex: 1 },
@@ -20,6 +19,7 @@ export default function EmployeeList() {
     { field: "zipCode", headerName: "Zip Code", flex: 1 },
     { field: "department", headerName: "Department", flex: 1 },
   ];
+
 
   const rows = employees.map((employee: any, index: number) => ({
     ...employee,
@@ -54,6 +54,7 @@ export default function EmployeeList() {
         <Button
           variant="outlined"
           color="primary"
+          data-testid="create-employee-button"
           startIcon={<AddIcon />}
           component={Link}
           to="/create-employee"
@@ -77,7 +78,7 @@ export default function EmployeeList() {
           columns={columns}
           checkboxSelection
           disableRowSelectionOnClick
-          sx={{backgroundColor: "background.default" }}
+          sx={{ backgroundColor: "background.default" }}
         />
       </Box>
     </Layout>

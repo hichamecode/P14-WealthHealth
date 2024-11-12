@@ -1,14 +1,13 @@
-// store/addressSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { apiKey } from "../utils/apiKey";
 
 export const fetchAddressSuggestions = createAsyncThunk(
   "address/fetchSuggestions",
   async (input) => {
     const response = await fetch(
-      `/api/place/autocomplete/json?input=${input}&components=country:us&key=AIzaSyD3GzAis1lcQb2Ullniu_spiQS_mqOkRAU`,
+      `/api/place/autocomplete/json?input=${input}&components=country:us&key=${apiKey}`,
     );
     const data = await response.json();
-    console.log("data from api", data);
     return data.predictions;
   },
 );

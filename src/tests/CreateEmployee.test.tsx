@@ -6,16 +6,25 @@ import { describe, it, expect, vi } from "vitest";
 import CreateEmployee from "../pages/CreateEmployee";
 import { store } from "../store/store"
 
-describe("CreateEmployee Component", () => {
-  it("renders the form elements", () => {
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <CreateEmployee />
-        </MemoryRouter>
-      </Provider>
-    );
+const setup = () => {
+  render(
+    <Provider store={store}>
+      <MemoryRouter>
+        <CreateEmployee />
+      </MemoryRouter>
+    </Provider>
+  )
+}
 
+describe("CreateEmployee Component", () => {
+  it("should render the title and the employee list button", () => {
+    setup()
+    expect(screen.getByText("CREATE EMPLOYEE")).toBeInTheDocument();
+    expect(screen.getByTestId("employee-list-button")).toBeInTheDocument();
+  })
+
+  it("should render the form elements", () => {
+    setup()
     expect(screen.getByTestId("employee-form")).toBeInTheDocument()
     expect(screen.getByTestId("first-name")).toBeInTheDocument();
     expect(screen.getByTestId("last-name")).toBeInTheDocument();
@@ -28,16 +37,8 @@ describe("CreateEmployee Component", () => {
     expect(screen.getByTestId("department")).toBeInTheDocument()
   });
 
-  it("shows validation errors when required fields are empty", async () => {
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <CreateEmployee />
-        </MemoryRouter>
-      </Provider>
-    );
-
+  it("should show validation errors when required fields are empty", async () => {
+    setup()
     const saveButton = screen.getByRole("button", { name: /SAVE/i });
     await userEvent.click(saveButton);
 
@@ -51,7 +52,7 @@ describe("CreateEmployee Component", () => {
     });
   });
 
-  it("submits the form with valid data", async () => {
+  it("should submit the form with valid data", async () => {
     const mockDispatch = vi.fn();
     const { container } = render(
       <Provider store={{ ...store, dispatch: mockDispatch }}>
@@ -67,7 +68,6 @@ describe("CreateEmployee Component", () => {
     await userEvent.type(screen.getByLabelText(/City/i), "Anytown");
     await userEvent.type(screen.getByLabelText(/State/i), "CA");
     await userEvent.type(screen.getByLabelText(/Zip Code/i), "12345");
-
 
     const department = container.querySelector('input[name="department"]');
     console.log(department)
@@ -87,4 +87,13 @@ describe("CreateEmployee Component", () => {
       expect(mockDispatch).toHaveBeenCalled();
     });
   });
+
+  it("should navigate to the Employee List page when the button 'Employee List' is clicked", async () => {
+    setup()
+    const EmployeeListButton = screen.getByTestId("employee-list-button")
+    await userEvent.click(EmployeeListButton)
+    waitFor(() => {
+      expect(window.location.pathname).toBe("/create-employee");
+    });
+  })
 });
