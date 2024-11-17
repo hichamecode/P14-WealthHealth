@@ -6,10 +6,11 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { GridFilterModel } from "@mui/x-data-grid";
+import dataType from "../types/DataType";
 
 
 export default function EmployeeList() {
-  const employees = useSelector((state) => state.employees.employees);
+  const employees = useSelector((state: { employees: { employees: dataType[] } }) => state.employees.employees);
   const [searchText, setSearchText] = useState("");
   const [filterModel, setFilterModel] = useState<GridFilterModel>({
     items: [],
@@ -32,7 +33,7 @@ export default function EmployeeList() {
     id: index,
   }));
 
-  const filteredRows = rows.filter((row) =>
+  const filteredRows = rows.filter((row: dataType) =>
     Object.values(row).some((value) =>
       String(value).toLowerCase().includes(searchText.toLowerCase())
     )

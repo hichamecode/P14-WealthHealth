@@ -73,7 +73,7 @@ export default function CreateEmployee() {
   });
 
   const navigate = useNavigate();
-  const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
+  // const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
 
   const onSubmit: SubmitHandler<FormFields> = (data): void => {
     dispatch(createEmployeeThunk(data));
