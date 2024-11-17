@@ -1,3 +1,7 @@
+/**
+ * Redux store configuration for the app
+ */
+
 import { configureStore } from "@reduxjs/toolkit";
 import themeSlice from "./themeSlice";
 import employeesSlice from "./employeesSlice";

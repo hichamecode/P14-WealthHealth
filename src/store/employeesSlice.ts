@@ -1,3 +1,12 @@
+/**
+ * Redux Toolkit createSlice to manage the state of the employees
+ * CreateAsyncThunk to handle the creation of employees 
+ * The data is stored in the local storage
+ * typedef {object} dataType 
+ * It represents the structure of an employee data object
+ */
+
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import dataType from "../types/DataType";
 

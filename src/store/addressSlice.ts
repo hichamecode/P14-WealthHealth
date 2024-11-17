@@ -1,3 +1,7 @@
+/**
+ * RTK createSlice for fetching address suggestions from the Google Places API.
+ */
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiKey } from "../utils/apiKey";
 

@@ -73,7 +73,6 @@ export default function CreateEmployee() {
   });
 
   const navigate = useNavigate();
-  // const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
 
   const onSubmit: SubmitHandler<FormFields> = (data): void => {
     dispatch(createEmployeeThunk(data));
@@ -285,7 +284,6 @@ export default function CreateEmployee() {
                   {...register("state")}
                   helperText={errors.state?.message}
                 />
-                {/* <FormHelperText>{errors.state?.message}</FormHelperText> */}
               </FormControl>
               <TextField
                 sx={styleForInputLabels}

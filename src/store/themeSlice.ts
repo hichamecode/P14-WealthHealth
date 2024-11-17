@@ -1,3 +1,7 @@
+/**
+ * RTK createSlice for managing the theme state
+ */
+
 import { createSlice } from '@reduxjs/toolkit'
 
 const themeSlice = createSlice({
