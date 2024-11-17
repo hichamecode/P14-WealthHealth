@@ -29,6 +29,7 @@
     "react-router-dom": "^6.26.2",
     "redux-mock-store": "^1.5.5",
     "sass": "^1.79.4",
+    "testing-library": "^0.0.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
