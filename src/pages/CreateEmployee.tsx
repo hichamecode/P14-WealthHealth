@@ -27,9 +27,12 @@ import { FormFields, schema } from "../utils/validationSchema";
 import { createEmployeeThunk } from "../store/employeesSlice";
 import { fetchAddressSuggestions } from "../store/addressSlice";
 import { useState } from "react";
-import { showToastSuccess, showToastError } from "../utils/toastNotifications";
+import Modal from "hichamebelyazid-modal/src/components/Modal/Modal";
 
 export default function CreateEmployee() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalText, setModalText] = useState("");
   const [, setAddressInput] = useState("");
   const dispatch: AppDispatch = useDispatch();
 
@@ -44,12 +47,11 @@ export default function CreateEmployee() {
     }
   };
 
-  // créer un champ chooseAddress pour distribuer les datas de l'adresse
   const handleAddressSelect = (
     event: React.SyntheticEvent,
-    selectedOption: { description: string }
+    selectedOption: { description: string } | null
   ) => {
-    if (selectedOption) {
+    if (selectedOption && selectedOption.description) {
       const [street, city, state] = selectedOption.description
         .split(",")
         .map((item) => item.trim());
@@ -77,16 +79,22 @@ export default function CreateEmployee() {
     dispatch(createEmployeeThunk(data));
 
     try {
-      showToastSuccess("Employee created successfully", isDarkMode);
-      navigate("/employee-list");
+      setModalTitle("Employee Created");
+      setModalText("Employee created successfully");
+      setModalVisible(true);
+      setTimeout(() => {navigate("/employee-list")}, 3000);
     } catch (error) {
       console.log("error ", error);
-      showToastError("Failed to create employee", isDarkMode);
+      setModalTitle("Error");
+      setModalText("Failed to create employee");
+      setModalVisible(true);
     }
   };
 
   const onInvalid = (): void => {
-    showToastError("Please fill in all required fields", isDarkMode);
+    setModalTitle("INCOMPLETE FORM");
+    setModalText("Please fill in all required fields");
+    setModalVisible(true);
   };
 
   const styleForInputLabels = {
@@ -235,7 +243,7 @@ export default function CreateEmployee() {
                   option.description
                 }
                 onInputChange={handleAddressInput}
-                onChange={handleAddressSelect}
+                onChange={(event, value) => handleAddressSelect(event, value)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -330,6 +338,14 @@ export default function CreateEmployee() {
           </Button>
         </Grid2>
       </Box>
+       {/* Modal display */}
+       {modalVisible && (
+        <Modal
+          modalTitle={modalTitle}
+          modalText={modalText}
+          onClose={() => setModalVisible(false)}
+        />
+      )}
     </Layout>
   );
 }
