@@ -24,6 +24,4 @@ export default function Router() {
   );
 }
 
-
 // documentation obligatoire JSDOC , créer une lib à publier sur NPM avec son readme 
-// lien vers le repo hr net, lien vers le repo projet modal et lien vers lib npm 
