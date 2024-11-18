@@ -43,7 +43,7 @@ export default function CreateEmployee() {
   const handleAddressInput = (event: React.SyntheticEvent, value: string) => {
     setAddressInput(value);
     if (value.length > 2) {
-      dispatch(fetchAddressSuggestions(value));
+      dispatch(fetchAddressSuggestions());
     }
   };
 
@@ -75,7 +75,18 @@ export default function CreateEmployee() {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<FormFields> = (data): void => {
-    dispatch(createEmployeeThunk(data));
+      const employeeData = {
+          firstName: data.firstName || "",
+          lastName: data.lastName || "",
+          dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : new Date(),
+          startDate: data.startDate ? new Date(data.startDate) : new Date(),
+          street: data.street || "",
+          city: data.city || "",
+          state: data.state || "",
+          zipCode: data.zipCode || "",
+          department: data.department || "",
+      };
+      dispatch(createEmployeeThunk(employeeData));
 
     try {
       setModalTitle("Employee Created");

@@ -11,6 +11,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
-  
+  },
+  build: {
+    outDir: 'dist', // Vérifiez que vous avez le bon dossier de sortie
+    sourcemap: true, // Si vous avez besoin de sourcemaps pour le débogage
   },
 });

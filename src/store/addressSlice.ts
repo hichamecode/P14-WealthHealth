@@ -1,5 +1,5 @@
 /**
- * RTK createSlice for fetching address suggestions from the Google Places API.
+ * RTK createSlice is responsible for fetching address suggestions from the Google Places API.
  */
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
@@ -18,7 +18,7 @@ export const fetchAddressSuggestions = createAsyncThunk(
 
 const addressSlice = createSlice({
   name: "address",
-  initialState: { suggestions: [], loading: false, error: null },
+  initialState: { suggestions: [], loading: false, error: null as string | null },
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -30,7 +30,7 @@ const addressSlice = createSlice({
         state.loading = false;
       })
       .addCase(fetchAddressSuggestions.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error = action.error.message ?? "Unknown error";
         state.loading = false;
       });
   },

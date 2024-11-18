@@ -12,7 +12,6 @@ import NewHome from "../pages/NewHome";
 import Error from "../pages/Error";
 import EmployeeList from "../pages/EmployeeList";
 
-
 export default function Router() {
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
 

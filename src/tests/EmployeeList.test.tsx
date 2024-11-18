@@ -46,8 +46,8 @@ describe("EmployeeList Component", () => {
           {
             firstName: "ObiWan",
             lastName: "Kenobi",
-            dateOfBirth: "1990-01-01",
-            startDate: "2020-01-01",
+            dateOfBirth: new Date("1990-01-01"),
+            startDate: new Date("2020-01-01"),
             street: "123 Main Street",
             city: "Tatooine",
             state: "Outer Rim",

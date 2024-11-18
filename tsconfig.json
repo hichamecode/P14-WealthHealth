@@ -6,7 +6,19 @@
   ],
   "compilerOptions": {
     "jsx": "react-jsx",
+    "types": ["@testing-library/jest-dom", "@testing-library/user-event", "vite/client", "jest"],
+    "target": "esnext",  // ou "es6"
+    "module": "esnext", 
+    "moduleResolution": "node",
+    "outDir": "./dist",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
-  }
+    "allowSyntheticDefaultImports": true,
+  },
+  "include": ["src/**/*"],  // Inclus tous les fichiers sources
+  "exclude": ["node_modules"]
 }
+// desactiver tslint pour avoir un fichier builder 
+// ouvrir le dossier dist tout seul dans vscode et faire un live-server
+// mode navigation privée (optionnel)
+// mettre à jour le livrable sur openclassrooms 
+

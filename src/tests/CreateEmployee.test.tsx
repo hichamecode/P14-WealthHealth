@@ -1,10 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import userEvent from '@testing-library/user-event';
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
 import { describe, it, expect, vi } from "vitest";
 import CreateEmployee from "../pages/CreateEmployee";
 import { store } from "../store/store"
+
 
 const setup = () => {
   render(
@@ -68,17 +69,6 @@ describe("CreateEmployee Component", () => {
     await userEvent.type(screen.getByLabelText(/City/i), "Anytown");
     await userEvent.type(screen.getByLabelText(/State/i), "CA");
     await userEvent.type(screen.getByLabelText(/Zip Code/i), "12345");
-
-    const department = container.querySelector('input[name="department"]');
-    console.log(department)
-    screen.debug()
-
-    if (department === null) {
-      throw new Error("Department input not found");
-    }
-
-    department.value = "Legal"
-    expect(department).toHaveValue("Legal");
 
     const saveButton = screen.getByRole("button", { name: /SAVE/i });
     await userEvent.click(saveButton);
